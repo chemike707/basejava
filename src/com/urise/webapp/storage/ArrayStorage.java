@@ -17,55 +17,48 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (checkResume(resume)) {
-            for (int i = 0; i < size; i++) {
-                if (resume.getUuid().equals(storage[i].getUuid())) {
-                    storage[i] = resume;
-                }
-            }
-        } else System.out.println("Resume not found");
+        if (checkResume(resume.getUuid()) != -1) {
+            storage[checkResume(resume.getUuid())] = resume;
+        } else System.out.println("Resume not found " + resume.getUuid());
+
     }
 
-    private boolean checkResume(Resume resume) {
+    public int checkResume(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (resume.getUuid().equals(storage[i].getUuid())) {
-                return true;
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
 
-
-    public void save(Resume r) {
-        if (!checkResume(r) && size < 10000) {
+    public void save(Resume resume) {
+        if (checkResume(resume.getUuid()) == -1 && size < storage.length) {
             size++;
             for (int i = 0; i < size; i++) {
-                if (r != storage[i]) {
-                    storage[size - 1] = r;
+                if (resume != storage[i]) {
+                    storage[size - 1] = resume;
                     break;
                 }
             }
-        } else System.out.println("Storage is full");
+        } else System.out.println("Storage is full " + resume.getUuid());
     }
 
     public Resume get(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                return storage[i];
-            }
+        if (checkResume(uuid) != -1) {
+            return storage[checkResume(uuid)];
         }
+        System.out.println("Resume not found " + uuid);
         return null;
     }
 
     public void delete(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                storage[i] = storage[size - 1];
-                storage[size - 1] = null;
-                size--;
-            }
-        }
+        if (checkResume(uuid) != -1) {
+            storage[checkResume(uuid)] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
+        } else System.out.println("Resume not found " + uuid);
     }
 
     /**

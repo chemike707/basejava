@@ -17,48 +17,48 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (checkResume(resume.getUuid()) != -1) {
-            storage[checkResume(resume.getUuid())] = resume;
+        int result = checkResume(resume.getUuid());
+        if (result != -1) {
+            storage[result] = resume;
         } else System.out.println("Resume not found " + resume.getUuid());
 
     }
 
-    public int checkResume(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-
     public void save(Resume resume) {
-        if (checkResume(resume.getUuid()) == -1 && size < storage.length) {
+        int result = checkResume(resume.getUuid());
+        if (result == -1) {
+            storage[size] = resume;
             size++;
-            for (int i = 0; i < size; i++) {
-                if (resume != storage[i]) {
-                    storage[size - 1] = resume;
-                    break;
-                }
-            }
-        } else System.out.println("Storage is full " + resume.getUuid());
+        } else if (size == storage.length) {
+            System.out.println("Storage is full " + resume.getUuid());
+        } else System.out.println("Resume is already present " + resume.getUuid());
     }
 
     public Resume get(String uuid) {
+        int result = checkResume(uuid);
         if (checkResume(uuid) != -1) {
-            return storage[checkResume(uuid)];
+            return storage[result];
         }
         System.out.println("Resume not found " + uuid);
         return null;
     }
 
     public void delete(String uuid) {
-        if (checkResume(uuid) != -1) {
-            storage[checkResume(uuid)] = storage[size - 1];
+        int result = checkResume(uuid);
+        if (result != -1) {
+            storage[result] = storage[size - 1];
             storage[size - 1] = null;
             size--;
         } else System.out.println("Resume not found " + uuid);
+    }
+
+    private int checkResume(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

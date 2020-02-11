@@ -18,36 +18,6 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index != -1) {
-            storage[index] = resume;
-            sortAfterAction();
-        } else System.out.println("Resume not found " + resume.getUuid());
-
-    }
-
-    public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index == -1) {
-            storage[size] = resume;
-            sortAfterAction();
-            size++;
-        } else if (size == STORAGE_LIMIT) {
-            System.out.println("Storage is full " + resume.getUuid());
-        } else System.out.println("Resume is already present " + resume.getUuid());
-    }
-
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index != -1) {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            sortAfterAction();
-            size--;
-        } else System.out.println("Resume not found " + uuid);
-    }
-
     public int size() {
         return size;
     }
@@ -58,8 +28,22 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Resume " + uuid + " not exist");
             return null;
         }
-        sortAfterAction();
         return storage[index];
+    }
+
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        conditionUpdate(resume, index);
+    }
+
+    public void save(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        conditionSave(resume, index);
+    }
+
+    public void delete(String uuid) {
+        int index = getIndex(uuid);
+        conditionDelete(uuid, index);
     }
 
     public Resume[] getAll() {
@@ -68,5 +52,9 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract int getIndex(String uuid);
 
-    protected abstract void sortAfterAction();
+    protected abstract void conditionUpdate(Resume resume, int index);
+
+    protected abstract void conditionSave(Resume resume, int index);
+
+    protected abstract void conditionDelete(String uuid, int index);
 }

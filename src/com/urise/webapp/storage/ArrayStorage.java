@@ -16,27 +16,15 @@ public class ArrayStorage extends AbstractArrayStorage {
         return -1;
     }
 
-    protected void conditionUpdate(Resume resume, int index) {
-        if (index != -1) {
-            storage[index] = resume;
-        } else System.out.println("Resume not found " + resume.getUuid());
+    @Override
+    protected void saveResume(Resume resume, int index) {
+        storage[size] = resume;
     }
 
-    protected void conditionSave(Resume resume, int index) {
-        if (index == -1) {
-            storage[size] = resume;
-            size++;
-        } else if (size == STORAGE_LIMIT) {
-            System.out.println("Storage is full " + resume.getUuid());
-        } else System.out.println("Resume is already present " + resume.getUuid());
+    @Override
+    protected void deleteResume(String uuid) {
+        int index = getIndex(uuid);
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
     }
-
-    protected void conditionDelete(String uuid, int index) {
-        if (index != -1) {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            size--;
-        } else System.out.println("Resume not found " + uuid);
-    }
-
 }

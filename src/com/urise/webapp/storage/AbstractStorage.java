@@ -7,23 +7,20 @@ import com.urise.webapp.model.Resume;
 public abstract class AbstractStorage implements Storage {
 
     public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            updateResume(resume, index);
+        if (checkIndex(resume.getUuid())) {
+            updateResume(resume, getIndex(resume.getUuid()));
         } else throw new NotExistStorageException(resume.getUuid());
     }
 
     public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
+        if (checkIndex(resume.getUuid())) {
             throw new ExistStorageException(resume.getUuid());
-        } else saveResume(resume, index);
+        } else saveResume(resume, getIndex(resume.getUuid()));
     }
 
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            deleteResume(index);
+        if (checkIndex(uuid)) {
+            deleteResume(getIndex(uuid));
         } else throw new NotExistStorageException(uuid);
     }
 
@@ -32,16 +29,20 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
+        if (!checkIndex(uuid)) {
             throw new NotExistStorageException(uuid);
         }
-        return getResume(index);
+        return getResume(getIndex(uuid));
     }
 
     @Override
     public Resume[] getAll() {
         return getAllResume();
+    }
+
+    protected boolean checkIndex(String uuid) {
+        int index = getIndex(uuid);
+        return index >= 0;
     }
 
     protected abstract int getIndex(String uuid);

@@ -12,7 +12,7 @@ public class ListStorage extends AbstractStorage {
     protected int getIndex(String uuid) {
         Resume resume = new Resume(uuid);
         for (int i = 0; i < storage.size(); i++) {
-            if (storage.contains(resume)) {
+            if (resume.hashCode() == storage.get(i).hashCode()) {
                 return i;
             }
         }

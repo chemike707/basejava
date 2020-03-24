@@ -18,46 +18,35 @@ public abstract class AbstractStorage implements Storage {
         deleteResume(checkNotExistStorageException(uuid));
     }
 
-    public void clear() {
-        clearStorage();
-    }
-
     public Resume get(String uuid) {
         return getResume(checkNotExistStorageException(uuid));
     }
 
-    @Override
-    public Resume[] getAll() {
-        return getAllResume();
-    }
-
-    private int checkNotExistStorageException(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
+    private Object checkNotExistStorageException(String uuid) {
+        Object index = getKey(uuid);
+        if (!existIndex(index)) {
             throw new NotExistStorageException(uuid);
         }
         return index;
     }
 
-    private int checkExistStorageException(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
+    private Object checkExistStorageException(String uuid) {
+        Object index = getKey(uuid);
+        if (existIndex(index)) {
             throw new ExistStorageException(uuid);
         }
         return index;
     }
 
-    protected abstract int getIndex(String uuid);
+    protected abstract Object getKey(String uuid);
 
-    protected abstract void updateResume(Resume resume, int index);
+    protected abstract void updateResume(Resume resume, Object index);
 
-    protected abstract void saveResume(Resume resume, int index);
+    protected abstract void saveResume(Resume resume, Object index);
 
-    protected abstract void deleteResume(int index);
+    protected abstract void deleteResume(Object index);
 
-    protected abstract void clearStorage();
+    protected abstract Resume getResume(Object index);
 
-    protected abstract Resume getResume(int index);
-
-    protected abstract Resume[] getAllResume();
+    protected abstract boolean existIndex(Object index);
 }

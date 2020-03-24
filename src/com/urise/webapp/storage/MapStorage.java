@@ -5,46 +5,49 @@ import com.urise.webapp.model.Resume;
 import java.util.*;
 
 public class MapStorage extends AbstractStorage {
-    Map<String, Resume> storage = new TreeMap<>();
+    Map<String, Resume> storage = new HashMap<>();
 
-    @Override
-    protected int getIndex(String uuid) {
+    protected Object getKey(String uuid) {
         Resume resume = new Resume(uuid);
-        if (storage.containsValue(resume)) {
-            return storage.hashCode();
+        if (storage.containsKey(resume.getUuid())) {
+            return resume.getUuid();
         }
-        return -1;
+        return null;
     }
 
     @Override
-    protected void updateResume(Resume resume, int index) {
-
+    protected boolean existIndex(Object index) {
+        return index != null;
     }
 
     @Override
-    protected void saveResume(Resume resume, int index) {
+    protected void updateResume(Resume resume, Object index) {
+        storage.put((String) index, resume);
+    }
+
+    @Override
+    protected void saveResume(Resume resume, Object index) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void deleteResume(int index) {
-
+    protected void deleteResume(Object index) {
+        storage.remove(index);
     }
 
     @Override
-    protected void clearStorage() {
-
+    protected Resume getResume(Object index) {
+        return storage.get(index);
     }
 
     @Override
-    protected Resume getResume(int index) {
-        Resume resume = new Resume();
-        return storage.get(resume.getUuid());
+    public void clear() {
+        storage.clear();
     }
 
     @Override
-    protected Resume[] getAllResume() {
-        return new Resume[0];
+    public Resume[] getAll() {
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override

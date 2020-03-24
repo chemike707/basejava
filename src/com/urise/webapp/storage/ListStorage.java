@@ -9,43 +9,48 @@ import java.util.List;
 public class ListStorage extends AbstractStorage {
     protected List<Resume> storage = new ArrayList<>();
 
-    protected int getIndex(String uuid) {
+    protected Object getKey(String  uuid) {
         Resume resume = new Resume(uuid);
         for (int i = 0; i < storage.size(); i++) {
-            if (resume.hashCode() == storage.get(i).hashCode()) {
+            if (resume.getUuid() == storage.get(i).getUuid()) {
                 return i;
             }
         }
-        return -1;
+        return null;
     }
 
     @Override
-    protected void updateResume(Resume resume, int index) {
-        storage.set(index, resume);
+    protected boolean existIndex(Object index) {
+        return index != null;
     }
 
     @Override
-    protected void saveResume(Resume resume, int index) {
+    protected void updateResume(Resume resume, Object index) {
+        storage.set((Integer) index, resume);
+    }
+
+    @Override
+    protected void saveResume(Resume resume, Object index) {
         storage.add(resume);
     }
 
     @Override
-    protected void deleteResume(int index) {
-        storage.remove(index);
+    protected void deleteResume(Object index) {
+        storage.remove((Integer) index);
     }
 
     @Override
-    protected void clearStorage() {
+    protected Resume getResume(Object index) {
+        return storage.get((Integer) index);
+    }
+
+    @Override
+    public void clear() {
         storage.clear();
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return storage.get(index);
-    }
-
-    @Override
-    protected Resume[] getAllResume() {
+    public Resume[] getAll() {
         Resume[] resumes = storage.toArray(new Resume[0]);
         return Arrays.copyOf(resumes, storage.size());
     }

@@ -5,39 +5,38 @@ import com.urise.webapp.model.Resume;
 import java.util.*;
 
 public class MapStorage extends AbstractStorage {
-    Map<String, Resume> storage = new HashMap<>();
+    SortedMap<String, Resume> storage = new TreeMap<>();
 
-    protected Object getKey(String uuid) {
-        Resume resume = new Resume(uuid);
-        if (storage.containsKey(resume.getUuid())) {
-            return resume.getUuid();
+    protected String getSearchKey(String uuid) {
+        if (storage.containsKey(uuid)) {
+            return uuid;
         }
         return null;
     }
 
     @Override
-    protected boolean existIndex(Object index) {
-        return index != null;
+    protected boolean existIndex(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    protected void updateResume(Resume resume, Object index) {
-        storage.put((String) index, resume);
+    protected void updateResume(Resume resume, Object searchKey) {
+        storage.put((String) searchKey, resume);
     }
 
     @Override
-    protected void saveResume(Resume resume, Object index) {
+    protected void saveResume(Resume resume, Object searchKey) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void deleteResume(Object index) {
-        storage.remove(index);
+    protected void deleteResume(Object searchKey) {
+        storage.remove((String) searchKey);
     }
 
     @Override
-    protected Resume getResume(Object index) {
-        return storage.get(index);
+    protected Resume getResume(Object searchKey) {
+        return storage.get((String) searchKey);
     }
 
     @Override

@@ -42,15 +42,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return storage[(Integer) index];
     }
 
-//    public List<Resume> getAllSorted() {
-//        return Arrays.asList(Arrays.copyOf(storage, size()));
-//    }
-
     public int size() {
         return size;
     }
 
-    public List<Resume> GetAll() {
+    public List<Resume> getAll() {
         return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 

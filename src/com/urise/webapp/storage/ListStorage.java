@@ -8,10 +8,9 @@ import java.util.List;
 public class ListStorage extends AbstractStorage {
     protected List<Resume> storage = new ArrayList<>();
 
-    protected Integer getSearchKey(String  uuid) {
-        Resume resume = new Resume(uuid, "Name");
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < storage.size(); i++) {
-            if (resume.getUuid().equals(storage.get(i).getUuid())) {
+            if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
@@ -44,7 +43,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected List<Resume> GetAll() {
+    protected List<Resume> getAll() {
         return new ArrayList<>(storage);
     }
 
@@ -52,11 +51,6 @@ public class ListStorage extends AbstractStorage {
     public void clear() {
         storage.clear();
     }
-
-//    @Override
-//    public List<Resume> getAllSorted() {
-//        return storage;
-//    }
 
     @Override
     public int size() {

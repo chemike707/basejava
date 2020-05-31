@@ -6,15 +6,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
-//    ResumeComparator resumeComparator = new ResumeComparator();
-//
-//    private static class ResumeComparator implements Comparator<Resume> {
-//        @Override
-//        public int compare(Resume o1, Resume o2) {
-//            return o1.getUuid().compareTo(o2.getUuid());
-//        }
-//    }
-
     Comparator<Resume> comparator = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
 
     @Override
